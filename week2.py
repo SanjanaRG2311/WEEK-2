@@ -12,15 +12,12 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import seaborn as sns
 
-# Suppress warnings
 import warnings
 warnings.filterwarnings('ignore')
 
-# Define dataset paths
 train_path = "C:/Users/sanja/Downloads/archive (6)/DATASET/TRAIN"  
 test_path = "C:/Users/sanja/Downloads/archive (6)/DATASET/TEST"
 
-# Data Augmentation
 train_datagen = ImageDataGenerator(
     rescale=1./255,
     rotation_range=30,
@@ -50,7 +47,6 @@ validation_generator = train_datagen.flow_from_directory(
     subset='validation'
 )
 
-# Define Optimized CNN Model
 def build_optimized_cnn():
     model = Sequential([
         Conv2D(64, (3,3), activation='relu', input_shape=(150,150,3)),
@@ -72,12 +68,10 @@ def build_optimized_cnn():
     ])
     return model
 
-# Build and compile model
 model = build_optimized_cnn()
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 model.summary()
 
-# Train model with early stopping
 early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
 history = model.fit(
     train_generator,
@@ -86,7 +80,6 @@ history = model.fit(
     callbacks=[early_stopping]
 )
 
-# Plot training history
 plt.style.use('seaborn-darkgrid')
 plt.figure(figsize=(12, 5))
 
@@ -107,3 +100,4 @@ plt.xlabel('Epochs', fontsize=12)
 plt.ylabel('Loss', fontsize=12)
 
 plt.show()
+
